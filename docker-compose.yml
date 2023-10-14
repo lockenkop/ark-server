@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  server:
+    restart: always
+    container_name: ark_server
+    image: hermsi/ark-server:latest
+    volumes:
+      - /home/serverderver/docker/ark-server/app:/app
+      - /home/serverderver/docker/ark-server/backups:/home/steam/ARK-Backups
+    environment:
+      SESSION_NAME: "MerseServer"
+      SERVER_MAP: "Fjordur"
+      SERVER_PASSWORD: ${SERVER_PASSWORD} 
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      MAX_PLAYERS: 5
+      UPDATE_ON_START: 1 
+      BACKUP_ON_STOP: 1
+      PRE_UPDATE_BACKUP: 1
+      WARN_ON_STOP: 1 # 731604991
+      GAME_MOD_IDS: "1999447172,1404697612,1609138312,895711211,1814953878,2984407853,520879363,1967741708,2833371736"
+                    # SS       ,awesomespy,Dino Stor2,class fly,castleskee,Rhynioever,Stairsmod,reusables ,minimeksv2
+    ports:
+      # Port for connections from ARK game client
+      - "7777:7777/udp"
+      # Raw UDP socket port (always Game client port +1)
+      - "7778:7778/udp"
+      # Port for Scorched Earth
+      - "7779:7779/udp"
+      - "7780:7780/udp"
+      # Port for LostIsland
+      - "7781:7781/udp"
+      - "7782:7782/udp"
+      # RCON management port
+      - "27020:27020/tcp"
+      # Steam's server-list port
+      - "27015:27015/udp"
+      - "27016:27016/udp"
+      - "27017:27017/udp"
+    network_mode: bridge
